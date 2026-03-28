@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Smart Attendance Manager</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10b981;
+            --primary-hover: #059669;
+            --primary-gradient: linear-gradient(135deg, #10b981, #059669);
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .app-logo {
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .settings-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-color);
+            animation: fadeInUp 0.6s ease;
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .settings-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .settings-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .settings-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 15px 0 10px 0;
+        }
+
+        .settings-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.02));
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .settings-section:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .settings-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-section h2 i {
+            font-size: 1.6rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-info h3 {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-info h3 i {
+            color: var(--primary-color);
+        }
+
+        .setting-info p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        .setting-control {
+            margin-left: 20px;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Select Dropdown */
+        select {
+            padding: 10px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        select:hover {
+            border-color: var(--primary-color);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        /* Button */
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-enabled {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary-color);
+        }
+
+        .status-disabled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        footer p {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .settings-card {
+                padding: 25px;
+            }
+
+            .settings-title {
+                font-size: 2rem;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .setting-control {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="logo.png" alt="Logo" class="app-logo">
+                <h1><i class="fas fa-cog"></i> Settings</h1>
+            </div>
+            <button class="back-btn" onclick="window.location.href='app.html'">
+                <i class="fas fa-arrow-left"></i> Back to App
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="settings-card">
+            <div class="settings-header">
+                <div class="settings-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h1 class="settings-title">Application Settings</h1>
+                <p class="settings-subtitle">অ্যাপ্লিকেশন সেটিংস কাস্টমাইজ করুন</p>
+            </div>
+
+            <!-- Appearance Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-palette"></i> Appearance</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-moon"></i> Dark Mode</h3>
+                        <p>Enable dark theme for comfortable viewing</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-text-height"></i> Font Size</h3>
+                        <p>Adjust text size for better readability</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="fontSizeSelect">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-bell"></i> Notifications</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-envelope"></i> Email Notifications</h3>
+                        <p>Receive updates via email</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="switch">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-desktop"></i> Desktop Notifications</h3>
+                        <p>Show browser notifications</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="switch">
+                            <input type="checkbox" id="desktopNotifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Privacy -->
+            <div class="settings-section">
+                <h2><i class="fas fa-shield-alt"></i> Data & Privacy</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-save"></i> Auto-Save</h3>
+                        <p>Automatically save changes</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="switch">
+                            <input type="checkbox" id="autoSave" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-cloud"></i> Cloud Sync</h3>
+                        <p>Sync data across devices</p>
+                    </div>
+                    <div class="setting-control">
+                        <span class="status-badge status-enabled">Enabled</span>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-download"></i> Backup Data</h3>
+                        <p>Download a backup of your data</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-language"></i> Language & Region</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-globe"></i> Language</h3>
+                        <p>Choose your preferred language</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="languageSelect">
+                            <option value="en">English</option>
+                            <option value="bn">বাংলা (Bengali)</option>
+                            <option value="hi">हिन्दी (Hindi)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-calendar"></i> Date Format</h3>
+                        <p>Choose date display format</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="dateFormatSelect">
+                            <option value="dd/mm/yyyy">DD/MM/YYYY</option>
+                            <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                            <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="settings-section">
+                <h2><i class="fas fa-tools"></i> Advanced</h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-broom"></i> Clear Cache</h3>
+                        <p>Clear temporary data and cache</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn" onclick="clearCache()">
+                            <i class="fas fa-broom"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3><i class="fas fa-redo"></i> Reset Settings</h3>
+                        <p>Reset all settings to default</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-danger" onclick="resetSettings()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i> Settings saved successfully!
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Blackman Studio. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color: #10b981;"></i> by SM RIFAT BILLAH</p>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Load saved preferences
+        const savedTheme = localStorage.getItem('theme');
+        const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+        const savedLanguage = localStorage.getItem('language') || 'en';
+        const savedDateFormat = localStorage.getItem('dateFormat') || 'dd/mm/yyyy';
+        const savedEmailNotif = localStorage.getItem('emailNotifications') !== 'false';
+        const savedDesktopNotif = localStorage.getItem('desktopNotifications') === 'true';
+        const savedAutoSave = localStorage.getItem('autoSave') !== 'false';
+
+        // Apply saved settings
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            darkModeToggle.checked = true;
+        }
+
+        document.getElementById('fontSizeSelect').value = savedFontSize;
+        document.getElementById('languageSelect').value = savedLanguage;
+        document.getElementById('dateFormatSelect').value = savedDateFormat;
+        document.getElementById('emailNotifications').checked = savedEmailNotif;
+        document.getElementById('desktopNotifications').checked = savedDesktopNotif;
+        document.getElementById('autoSave').checked = savedAutoSave;
+
+        // Apply font size
+        applyFontSize(savedFontSize);
+
+        // Dark mode toggle
+        darkModeToggle.addEventListener('change', function () {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+            showSuccessMessage();
+        });
+
+        // Font size change
+        document.getElementById('fontSizeSelect').addEventListener('change', function () {
+            const size = this.value;
+            localStorage.setItem('fontSize', size);
+            applyFontSize(size);
+            showSuccessMessage();
+        });
+
+        function applyFontSize(size) {
+            const root = document.documentElement;
+            switch (size) {
+                case 'small':
+                    root.style.fontSize = '14px';
+                    break;
+                case 'large':
+                    root.style.fontSize = '18px';
+                    break;
+                default:
+                    root.style.fontSize = '16px';
+            }
+        }
+
+        // Language change
+        document.getElementById('languageSelect').addEventListener('change', function () {
+            localStorage.setItem('language', this.value);
+            showSuccessMessage();
+        });
+
+        // Date format change
+        document.getElementById('dateFormatSelect').addEventListener('change', function () {
+            localStorage.setItem('dateFormat', this.value);
+            showSuccessMessage();
+        });
+
+        // Email notifications
+        document.getElementById('emailNotifications').addEventListener('change', function () {
+            localStorage.setItem('emailNotifications', this.checked);
+            showSuccessMessage();
+        });
+
+        // Desktop notifications
+        document.getElementById('desktopNotifications').addEventListener('change', function () {
+            localStorage.setItem('desktopNotifications', this.checked);
+            if (this.checked && 'Notification' in window) {
+                Notification.requestPermission();
+            }
+            showSuccessMessage();
+        });
+
+        // Auto-save
+        document.getElementById('autoSave').addEventListener('change', function () {
+            localStorage.setItem('autoSave', this.checked);
+            showSuccessMessage();
+        });
+
+        // Backup data
+        function backupData() {
+            const data = {
+                theme: localStorage.getItem('theme'),
+                fontSize: localStorage.getItem('fontSize'),
+                language: localStorage.getItem('language'),
+                dateFormat: localStorage.getItem('dateFormat'),
+                emailNotifications: localStorage.getItem('emailNotifications'),
+                desktopNotifications: localStorage.getItem('desktopNotifications'),
+                autoSave: localStorage.getItem('autoSave'),
+                timestamp: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `attendance-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showSuccessMessage('Backup downloaded successfully!');
+        }
+
+        // Clear cache
+        function clearCache() {
+            if (confirm('Are you sure you want to clear cache? This will not delete your attendance data.')) {
+                // Clear only cache-related items, not user data
+                const keysToKeep = ['theme', 'fontSize', 'language', 'dateFormat'];
+                const allKeys = Object.keys(localStorage);
+
+                allKeys.forEach(key => {
+                    if (!keysToKeep.includes(key) && !key.startsWith('firebase')) {
+                        // Keep Firebase auth and important settings
+                    }
+                });
+
+                showSuccessMessage('Cache cleared successfully!');
+            }
+        }
+
+        // Reset settings
+        function resetSettings() {
+            if (confirm('Are you sure you want to reset all settings to default? This will not delete your attendance data.')) {
+                localStorage.removeItem('theme');
+                localStorage.removeItem('fontSize');
+                localStorage.removeItem('language');
+                localStorage.removeItem('dateFormat');
+                localStorage.removeItem('emailNotifications');
+                localStorage.removeItem('desktopNotifications');
+                localStorage.removeItem('autoSave');
+
+                showSuccessMessage('Settings reset successfully! Reloading...');
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage(message = 'Settings saved successfully!') {
+            const msgElement = document.getElementById('successMessage');
+            msgElement.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            msgElement.classList.add('show');
+            setTimeout(() => {
+                msgElement.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

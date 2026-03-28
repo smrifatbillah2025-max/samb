@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S5MD8MQQ69"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S5MD8MQQ69');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="AvPQkBBJng5WMGRPMEQeSV7_RWWYq_YKsDzc3x4nsL0" />
+    <title>Smart Attendance Manager</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="app.css">
+
+</head>
+
+<body>
+    <div id="appContainer">
+        <header>
+            <img src="logo.png" alt="Logo" class="app-logo">
+            <h1>Attendance System</h1>
+            <div class="header-controls">
+                <div class="dark-mode-toggle">
+                    <span class="mode-label">Light</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="mode-label">Dark</span>
+                </div>
+                <div class="menu-toggle">
+                    <button class="three-dot-btn" id="threeDotBtn">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div class="profile-info">
+                    <i class="fas fa-user-circle profile-avatar"></i>
+                    <div class="profile-details">
+                        <span class="profile-name">User Name</span>
+                        <span class="profile-email">user@example.com</span>
+                    </div>
+                </div>
+                <hr>
+                <ul class="sidebar-menu">
+                    <li><a href="#" id="editProfile"><i class="fas fa-edit"></i> Edit Profile</a></li>
+                    <li><a href="#" id="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="help"><i class="fas fa-question-circle"></i> Help</a></li>
+                    <li><a href="#" id="about"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+                <hr>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="home-page">
+            <div class="card-container">
+                <div class="card">
+                    <i class="fas fa-plus-circle card-icon"></i>
+                    <h2>Create New Sheet</h2>
+                    <p>Click here to create a new attendance sheet</p>
+                    <button id="createNewSheet" class="btn card-btn">
+                        <i class="fas fa-plus"></i> New Sheet
+                    </button>
+                </div>
+
+                <div class="card">
+                    <i class="fas fa-list-alt card-icon"></i>
+                    <h2>View All Sheets</h2>
+                    <p>Click here to see all previously created sheets</p>
+                    <button id="viewAllSheets" class="btn card-btn">
+                        <i class="fas fa-eye"></i> View All
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        // Firebase Auth Protection for app.html
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRAQwYpcEVyQAVFjGF-WuNmGg8-K5pMHE",
+            authDomain: "gen-lang-client-0706325479.firebaseapp.com",
+            databaseURL: "https://gen-lang-client-0706325479-default-rtdb.firebaseio.com",
+            projectId: "gen-lang-client-0706325479",
+            storageBucket: "gen-lang-client-0706325479.firebasestorage.app",
+            messagingSenderId: "336160005275",
+            appId: "1:336160005275:web:6f4aa0912b165c91d6fa3e",
+            measurementId: "G-01Z6XHSGP0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log('User is authenticated:', user.email);
+
+                // Update profile display elements
+                const profileName = document.querySelector('.profile-name');
+                const profileEmail = document.querySelector('.profile-email');
+
+                // Set default values from Firebase Auth immediately
+                if (profileName && profileEmail) {
+                    profileName.textContent = user.displayName || user.email?.split('@')[0] || 'User';
+                    profileEmail.textContent = user.email || 'No email';
+                }
+
+                // Try to get additional data from Firestore
+                try {
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+
+                        // Update with Firestore data if available
+                        if (profileName && userData.username) {
+                            profileName.textContent = userData.username;
+                        }
+
+                        console.log('User data loaded from Firestore:', userData);
+                    } else {
+                        console.log('No Firestore document found, using Firebase Auth data');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data from Firestore:', error);
+                    console.log('Continuing with Firebase Auth data');
+                }
+
+                // Show the app content
+                document.getElementById('appContainer').style.display = 'block';
+            } else {
+                console.log('User is not authenticated, redirecting to login');
+                // User is not signed in, redirect to login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Handle logout
+        function handleLogout() {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function () {
+                    if (confirm('Are you sure you want to logout?')) {
+                        try {
+                            await signOut(auth);
+                            console.log('User signed out successfully');
+                            // onAuthStateChanged will handle the redirect
+                        } catch (error) {
+                            console.error('Error signing out:', error);
+                            alert('Error signing out. Please try again.');
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize logout handler when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hide app content initially
+            document.getElementById('appContainer').style.display = 'none';
+
+            // Set up logout handler
+            handleLogout();
+        });
+    </script>
+    <script src="app.js"></script>
+
+    <footer id="appFooter">
+        <div class="footer-content">
+            <span class="made-by">MADE BY SM RIFAT BILLAH</span>
+            <div class="company-info">
+                <img src="logo.png" alt="Blackman Logo" id="footerLogo">
+                <span class="company-name">Blackman Studio</span>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- About Modal -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-info-circle"></i> About</h2>
+                <button class="modal-close" onclick="closeAboutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="about-header">
+                    <h3 class="about-app-name">Smart Attendance Manager</h3>
+                    <p class="about-tagline">স্মার্ট উপস্থিতি ব্যবস্থাপক</p>
+                    <span class="version-badge">Version 2.0</span>
+                </div>
+
+                <div class="about-section">
+                    <h4><i class="fas fa-star"></i> About This App</h4>
+                    <p>Smart Attendance Manager is a modern, user-friendly application designed to simplify attendance
+                        tracking and management for educational institutions.</p>
+                    <p>এই অ্যাপ্লিকেশনটি শিক্ষা প্রতিষ্ঠানের জন্য উপস্থিতি ট্র্যাকিং এবং ব্যবস্থাপনা সহজ করার জন্য
+                        ডিজাইন করা হয়েছে।</p>
+                </div>
+
+                <div class="about-section">
+                    <h4><i class="fas fa-list-check"></i> Key Features</h4>
+                    <ul class="about-features">
+                        <li><i class="fas fa-check-circle"></i> Create and manage multiple attendance sheets</li>
+                        <li><i class="fas fa-check-circle"></i> Track student attendance with ease</li>
+                        <li><i class="fas fa-check-circle"></i> Generate detailed mark sheets and reports</li>
+                        <li><i class="fas fa-check-circle"></i> Print-ready attendance records</li>
+                        <li><i class="fas fa-check-circle"></i> Dark mode support for comfortable viewing</li>
+                        <li><i class="fas fa-check-circle"></i> Responsive design for all devices</li>
+                        <li><i class="fas fa-check-circle"></i> Secure data storage with Firebase</li>
+                        <li><i class="fas fa-check-circle"></i> Beautiful green-themed modern UI</li>
+                    </ul>
+                </div>
+
+                <div class="developer-info">
+                    <i class="fas fa-code"
+                        style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                    <div class="developer-name">SM RIFAT BILLAH</div>
+                    <div class="company-name"><i class="fas fa-building"></i> Blackman Studio</div>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> Email: <a
+                                href="mailto:contact@blackmanstudio.com">contact@blackmanstudio.com</a></p>
+                        <p style="margin-top: 15px; opacity: 0.7;">Thank you for using Smart Attendance Manager! 🎉</p>
+                        <p style="opacity: 0.7;">আমাদের অ্যাপ ব্যবহার করার জন্য ধন্যবাদ!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

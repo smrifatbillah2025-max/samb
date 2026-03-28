@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Smart Attendance Manager</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10b981;
+            --primary-hover: #059669;
+            --primary-gradient: linear-gradient(135deg, #10b981, #059669);
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .app-logo {
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-color);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .app-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .about-app-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 15px 0 10px 0;
+        }
+
+        .about-tagline {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .about-section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.02));
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .about-section:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .about-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .about-section h2 i {
+            font-size: 1.6rem;
+        }
+
+        .about-section p {
+            margin: 12px 0;
+            line-height: 1.8;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        .about-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .about-features li {
+            padding: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .about-features li:last-child {
+            border-bottom: none;
+        }
+
+        .about-features li:hover {
+            padding-left: 10px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 8px;
+        }
+
+        .about-features li i {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .about-features li span {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .developer-info {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .developer-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .developer-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 15px 0;
+        }
+
+        .company-name {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+            font-size: 1.05rem;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+        }
+
+        .contact-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .contact-info a:hover {
+            opacity: 0.7;
+            text-decoration: underline;
+        }
+
+        .thank-you {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .thank-you p {
+            font-size: 1.1rem;
+            margin: 8px 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        footer p {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .about-card {
+                padding: 25px;
+            }
+
+            .about-app-name {
+                font-size: 2rem;
+            }
+
+            .about-tagline {
+                font-size: 1.1rem;
+            }
+
+            .about-section {
+                padding: 20px;
+            }
+
+            .about-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .developer-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="logo.png" alt="Logo" class="app-logo">
+                <h1><i class="fas fa-info-circle"></i> About</h1>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="dark-mode-toggle">
+                    <span style="font-size: 0.9rem;">🌞</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span style="font-size: 0.9rem;">🌙</span>
+                </div>
+                <button class="back-btn" onclick="window.location.href='app.html'">
+                    <i class="fas fa-arrow-left"></i> Back to App
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="about-card">
+            <div class="about-header">
+                <div class="app-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h1 class="about-app-name">Smart Attendance Manager</h1>
+                <p class="about-tagline">স্মার্ট উপস্থিতি ব্যবস্থাপক</p>
+                <span class="version-badge">Version 2.0</span>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-star"></i> About This App</h2>
+                <p><strong>English:</strong> Smart Attendance Manager is a modern, user-friendly application designed to
+                    simplify attendance tracking and management for educational institutions. Built with cutting-edge
+                    web technologies, it provides a seamless experience for teachers and administrators to manage
+                    student attendance efficiently.</p>
+                <p><strong>বাংলা:</strong> স্মার্ট উপস্থিতি ব্যবস্থাপক একটি আধুনিক, ব্যবহারকারী-বান্ধব অ্যাপ্লিকেশন যা
+                    শিক্ষা প্রতিষ্ঠানের জন্য উপস্থিতি ট্র্যাকিং এবং ব্যবস্থাপনা সহজ করার জন্য ডিজাইন করা হয়েছে।
+                    অত্যাধুনিক ওয়েব প্রযুক্তির সাথে নির্মিত, এটি শিক্ষক এবং প্রশাসকদের জন্য দক্ষতার সাথে শিক্ষার্থীদের
+                    উপস্থিতি পরিচালনা করার জন্য একটি নিরবচ্ছিন্ন অভিজ্ঞতা প্রদান করে।</p>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-list-check"></i> Key Features</h2>
+                <ul class="about-features">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Multiple Attendance Sheets:</strong> Create and manage unlimited attendance sheets
+                            for different classes and subjects</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Easy Attendance Tracking:</strong> Mark student attendance with a simple,
+                            intuitive interface</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Detailed Mark Sheets:</strong> Generate comprehensive mark sheets and performance
+                            reports</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Print-Ready Records:</strong> Export and print attendance records in professional
+                            format</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Dark Mode Support:</strong> Comfortable viewing experience with automatic dark
+                            mode</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Fully Responsive:</strong> Works seamlessly on desktop, tablet, and mobile
+                            devices</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Secure Cloud Storage:</strong> All data securely stored with Firebase
+                            authentication</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Beautiful Green Theme:</strong> Modern emerald green design with smooth
+                            animations</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-code"></i> Technology Stack</h2>
+                <p>This application is built using modern web technologies:</p>
+                <ul class="about-features">
+                    <li><i class="fab fa-html5"></i> <span><strong>HTML5</strong> - Semantic markup and structure</span>
+                    </li>
+                    <li><i class="fab fa-css3-alt"></i> <span><strong>CSS3</strong> - Modern styling with animations and
+                            gradients</span></li>
+                    <li><i class="fab fa-js"></i> <span><strong>JavaScript</strong> - Dynamic functionality and
+                            interactivity</span></li>
+                    <li><i class="fas fa-fire"></i> <span><strong>Firebase</strong> - Authentication and cloud
+                            database</span></li>
+                    <li><i class="fas fa-mobile-alt"></i> <span><strong>Responsive Design</strong> - Mobile-first
+                            approach</span></li>
+                </ul>
+            </div>
+
+            <div class="developer-info">
+                <div class="developer-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="developer-name">SM RIFAT BILLAH</div>
+                <div class="company-name">
+                    <i class="fas fa-building"></i>
+                    <span>Blackman Studio</span>
+                </div>
+                <div class="contact-info">
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: <a href="mailto:smrifatbillah2025@gmail.com">smrifatbillah2025@gmail.com</a>
+                    </p>
+                    <div class="thank-you">
+                        <p><strong>Thank you for using Smart Attendance Manager! 🎉</strong></p>
+                        <p><strong>আমাদের অ্যাপ ব্যবহার করার জন্য ধন্যবাদ! 🙏</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Blackman Studio. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color: #10b981;"></i> by SM RIFAT BILLAH</p>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Load saved preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            darkModeToggle.checked = true;
+        }
+
+        // Toggle dark mode
+        darkModeToggle.addEventListener('change', function () {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+
+</html>
